@@ -111,6 +111,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 startActivity(new Intent(this,LoginAdmin.class));
                 break;
 
+            case R.id.edtViewProfile:
+                studentView();
+
         }
         return true;
     }
@@ -134,8 +137,14 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.Logout:
                 Logout();
                 break;
+
+            case R.id.edtViewProfile:
+                studentView();
         }
         return false;
+    }
+    private void studentView(){
+        startActivity(new Intent(this,studentView.class));
     }
     private void Home(){
         startActivity(new Intent(this,Home.class));
