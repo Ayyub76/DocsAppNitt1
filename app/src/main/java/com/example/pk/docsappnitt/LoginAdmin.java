@@ -212,12 +212,51 @@ public class LoginAdmin extends AppCompatActivity {
                     return;
                 }
                 else if(dataSnapshot.hasChild(DocId)){
+                    final String DocId1=DocId;
                     final FirebaseUser user=mAuth.getCurrentUser();
-                    DoctorProfile docPro=new DoctorProfile(user.getDisplayName(),user.getUid());
-                    databaseReference.child("Doctors").child(DocId).setValue(docPro);
-                    databaseReference.child("users").child(user.getUid()).child("flagDoctor").setValue("yes");
-                    Toast.makeText(LoginAdmin.this,"Doctor Login SuccessFull",Toast.LENGTH_SHORT).show();
-                    GotoDocPage();
+                    DatabaseReference db=FirebaseDatabase.getInstance().getReference().child("Doctors").child(DocId).child("Name");
+                    db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String Name=dataSnapshot.getValue(String.class);
+                            if(user.getDisplayName().equals(Name)){
+                                final String DocID1=DocId1;
+                                DoctorProfile docPro=new DoctorProfile(user.getDisplayName(),user.getUid());
+                                DatabaseReference doc=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
+                                doc.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Profile docProfile=new Profile();
+                                        docProfile=dataSnapshot.getValue(Profile.class);
+                                        databaseReference.child("Doctors").child(DocID1).child("Profile").setValue(docProfile);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                                databaseReference.child("DoctorList").child(user.getUid()).setValue(docPro.Name);
+                                databaseReference.child("Doctors").child(DocId1).setValue(docPro);
+                                databaseReference.child("users").child(user.getUid()).child("Profile").child("flagDoctor").setValue("yes");
+                                databaseReference.child("users").child(user.getUid()).child("Profile").child("isDoctor").setValue("yes");
+                                Toast.makeText(LoginAdmin.this,"Doctor Login SuccessFull",Toast.LENGTH_SHORT).show();
+                                GotoDocPage();
+                            }
+                            else{
+                                txtDocId.setError("Our database says You are not a Doctor!");
+                                txtDocId.requestFocus();
+                                Toast.makeText(LoginAdmin.this,"Doctor Id invalid or Id doesn't exist",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 else{
                     txtDocId.setError("Invalid Id");
@@ -235,7 +274,9 @@ public class LoginAdmin extends AppCompatActivity {
     }
     private void GotoDocPage() {
         finish();
-        startActivity(new Intent(this,DoctorHome.class));
+        Intent intent= new Intent(LoginAdmin.this, DoctorHome.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
     private void PharmacistLogin(){
         DatabaseReference db=FirebaseDatabase.getInstance().getReference().child("Pharmacists");
@@ -248,9 +289,53 @@ public class LoginAdmin extends AppCompatActivity {
                     txtPharmId.requestFocus();
                     return;
                 }
-                else if(dataSnapshot.hasChild(PharmId)==true){
-                    Toast.makeText(LoginAdmin.this,"Pharmacist Login SuccessFull",Toast.LENGTH_SHORT).show();
-                    GotoPharmacistPage();
+                else if(dataSnapshot.hasChild(PharmId)){
+                    final String PharmId1=PharmId;
+                    final FirebaseUser user=mAuth.getCurrentUser();
+                    DatabaseReference db=FirebaseDatabase.getInstance().getReference().child("Pharmacists").child(PharmId).child("Name");
+                    db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String Name=dataSnapshot.getValue(String.class);
+                            if(user.getDisplayName().equals(Name)){
+                                final String PharmID1=PharmId1;
+                                DoctorProfile docPro=new DoctorProfile(user.getDisplayName(),user.getUid());
+                                DatabaseReference doc=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
+                                doc.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Profile docProfile=new Profile();
+                                        docProfile=dataSnapshot.getValue(Profile.class);
+                                        databaseReference.child("Pharmacists").child(PharmID1).child("Profile").setValue(docProfile);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                                databaseReference.child("Pharmacists").child(PharmID1).setValue(docPro);
+                                databaseReference.child("users").child(user.getUid()).child("Profile").child("flagPharma").setValue("yes");
+                                databaseReference.child("users").child(user.getUid()).child("Profile").child("isPharma").setValue("yes");
+                                Toast.makeText(LoginAdmin.this,"Pharmacist Login SuccessFull",Toast.LENGTH_SHORT).show();
+                                GotoPharmacistPage();
+
+
+                            }
+                            else{
+                                txtDiagId.setError("Our Database Says you are not a pharmacist");
+                                txtDiagId.requestFocus();
+                                Toast.makeText(LoginAdmin.this,"Id doesn't Exist",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
                 else{
                     txtPharmId.setError("Invalid Id");
@@ -266,7 +351,9 @@ public class LoginAdmin extends AppCompatActivity {
     }
     private void GotoPharmacistPage(){
         finish();
-        startActivity(new Intent(this,PharmacistHome.class));
+        Intent intent= new Intent(LoginAdmin.this, PharmacistHome.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
     private void DiagnosticLogin(){
         DatabaseReference db=FirebaseDatabase.getInstance().getReference().child("Diagnosticians");
@@ -280,8 +367,50 @@ public class LoginAdmin extends AppCompatActivity {
                     return;
                 }
                 else if(dataSnapshot.hasChild(DiagId)){
-                    Toast.makeText(LoginAdmin.this,"Diagnostician Login Successfull",Toast.LENGTH_SHORT).show();
-                    GotoDiagPage();
+                    final String DiagId1=DiagId;
+                    final FirebaseUser user=mAuth.getCurrentUser();
+                    DatabaseReference db=FirebaseDatabase.getInstance().getReference().child("Diagnosticians").child(DiagId).child("Name");
+                    db.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String name=dataSnapshot.getValue(String.class);
+                            if(user.getDisplayName().equals(name) ){
+                                final String DiagID1=DiagId1;
+                                DoctorProfile docPro=new DoctorProfile(user.getDisplayName(),user.getUid());
+                                DatabaseReference doc=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
+                                doc.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Profile docProfile=new Profile();
+                                        docProfile=dataSnapshot.getValue(Profile.class);
+                                        databaseReference.child("Diagnosticians").child(DiagID1).child("Profile").setValue(docProfile);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                                databaseReference.child("Diagnosticians").child(DiagId1).setValue(docPro);
+                                databaseReference.child("users").child(user.getUid()).child("Profile").child("flagDiag").setValue("yes");
+                                databaseReference.child("users").child(user.getUid()).child("Profile").child("isDiagnostician").setValue("yes");
+                                Toast.makeText(LoginAdmin.this,"Diagnostician Login Successfull",Toast.LENGTH_SHORT).show();
+                                GotoDiagPage();
+                            }
+                            else{
+                                txtDiagId.setError("Our database says You are not a Diagnostician!");
+                                txtDiagId.requestFocus();
+                                Toast.makeText(LoginAdmin.this,"Id doesn't Exist",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
                 else{
                     txtDiagId.setError("Id Invalid or Error");
@@ -299,7 +428,10 @@ public class LoginAdmin extends AppCompatActivity {
     }
     private void GotoDiagPage(){
         finish();
-        startActivity(new Intent(this,diagnostic_home.class));
+        Intent intent= new Intent(LoginAdmin.this, diagnostic_home.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
     private void Home(){

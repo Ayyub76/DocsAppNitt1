@@ -38,14 +38,35 @@
             android:label="Admin Options" />
         <activity
             android:name=".DoctorHome"
-            android:label="Welcome Doctor"></activity>
+            android:label="Welcome Doctor" />
         <activity
             android:name=".PharmacistHome"
-            android:label="Welcome Pharmacist"></activity>
+            android:label="Welcome Pharmacist" />
         <activity
             android:name=".diagnostic_home"
-            android:label="Welcome Diagnostician"></activity>
-        <activity android:name=".studentView"></activity>
+            android:label="Welcome Diagnostician" />
+        <activity android:name=".diagInboxTabbed" />
+        <activity android:name=".studentView" />
+        <activity android:name=".ConsultDoctor" />
+        <activity android:name=".Inbox" />
+        <activity android:name=".MessageViewComplete" />
+        <activity android:name=".DoctorInbox" />
+        <activity android:name=".SentBox" />
+        <activity
+            android:name=".InboxTabbed"
+            android:label="@string/title_activity_inbox_tabbed"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SentBoxTabbed"
+            android:label="@string/title_activity_sent_box_tabbed"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MessageViewForDoctor" />
+        <activity android:name=".doctorInboxTabbed" />
+        <activity android:name=".TreatPatient" />
+        <activity android:name=".DoctorSentboxTabbed" />
+        <activity android:name=".MessageViewForDiagnostician" />
+        <activity android:name=".MessageViewForPatientFromDoctor" />
+        <activity android:name=".PharmacistReport"></activity>
     </application>
 
 </manifest>

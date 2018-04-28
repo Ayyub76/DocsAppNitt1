@@ -7,16 +7,6 @@
         android:title="Home" />
 
     <item
-        android:id="@+id/edtProfile"
-        android:icon="@drawable/person"
-        android:title="Edit Profile" />
-
-    <item
-        android:id="@+id/edtViewProfile"
-        android:icon="@drawable/view"
-        android:title="View Profile" />
-
-    <item
         android:id="@+id/edtTreatPatient"
         android:icon="@drawable/patient"
         android:title="Treat Patient" />
@@ -31,11 +21,9 @@
         android:icon="@drawable/sent"
         android:title="SentBox" />
 
-    <item
-        android:id="@+id/AdminOptions"
-        android:icon="@drawable/admin"
-        android:title="Admin Options" />
-
+    <item android:title="LogOut As Doctor"
+        android:id="@+id/LogoutAsDoctor"
+        android:icon="@drawable/signout"/>
     <item
         android:id="@+id/Logout"
         android:icon="@drawable/signout"

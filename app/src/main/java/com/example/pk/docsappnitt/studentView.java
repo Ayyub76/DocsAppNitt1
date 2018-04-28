@@ -128,12 +128,12 @@ public class studentView extends AppCompatActivity {
     private void loadUserInformation(){
         final FirebaseUser user=mAuth.getCurrentUser();
         if(user!=null){
-            DatabaseReference df1=FirebaseDatabase.getInstance().getReference().child("users");
+            DatabaseReference df1=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
             df1.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.hasChild(user.getUid())){
-                        DatabaseReference df=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+                    //if(dataSnapshot.hasChild(user.getUid())){
+                        DatabaseReference df=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
                         df.child("MobileNumber").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -179,7 +179,7 @@ public class studentView extends AppCompatActivity {
                         });
 
                     }
-                }
+               // }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {

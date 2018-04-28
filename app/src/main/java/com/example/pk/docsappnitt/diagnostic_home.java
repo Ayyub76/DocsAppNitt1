@@ -18,6 +18,8 @@ import com.androidquery.AQuery;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class diagnostic_home extends AppCompatActivity {
 
@@ -30,10 +32,17 @@ public class diagnostic_home extends AppCompatActivity {
     Uri photoUrl;
     ImageView mPic;
 
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diagnostic_home);
+
+        databaseReference= FirebaseDatabase.getInstance().getReference();
+        mAuth=FirebaseAuth.getInstance();
 
         drawerLayout=(DrawerLayout)findViewById(R.id.DrawerLayoutDiagnosticianHome);
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
@@ -55,13 +64,15 @@ public class diagnostic_home extends AppCompatActivity {
                     case R.id.edtHome:
                         Home();
                         break;
-
-                    case R.id.edtProfile:
-                        EditProfile();
+                    case R.id.edtReport:
                         break;
-
-                    case R.id.AdminOptions:
-                        AdminOption();
+                    case R.id.edtInbox:
+                        DiagInbox();
+                        break;
+                    case R.id.edtSentbox:
+                        break;
+                    case R.id.LogoutAsDiag:
+                        LogOutAsDiag();
                         break;
 
                     case R.id.Logout:
@@ -74,20 +85,27 @@ public class diagnostic_home extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
+    private void DiagInbox(){
+        startActivity(new Intent(this,diagInboxTabbed.class));
+    }
     private void Home(){
-        startActivity(new Intent(this,Home.class));
-    }
-    private void EditProfile(){
-        startActivity(new Intent(this,ProfileActivity.class));
-    }
-    private void AdminOption(){
-        startActivity(new Intent(this,LoginAdmin.class));
+        startActivity(new Intent(this,diagnostic_home.class));
     }
     private void Logout(){
         FirebaseAuth.getInstance().signOut();
         finish();
         startActivity(new Intent(this,StartingPage.class));
     }
+    private void LogOutAsDiag() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile").child("flagDiag");
+        databaseReference.setValue("no");
+        finish();
+        Intent intent= new Intent(diagnostic_home.this, Home.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.menu_profile,menu);

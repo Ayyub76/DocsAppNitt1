@@ -168,12 +168,27 @@ public class ProfileActivity extends AppCompatActivity {
                     case R.id.Logout:
                         Logout();
                         break;
+
+                    case R.id.edtViewProfile:
+                        studentView();
+                        break;
+
+                    case R.id.edtConsultDoctor:
+                        consultDoctor();
+                        break;
+
                 }
                 return false;
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+    private void consultDoctor(){
+        startActivity(new Intent(this,ConsultDoctor.class));
+    }
+    private void studentView(){
+        startActivity(new Intent(this,studentView.class));
     }
     private void Home(){
         startActivity(new Intent(this,Home.class));
@@ -203,13 +218,12 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadUserInformation(){
         final FirebaseUser user=mAuth.getCurrentUser();
         if(user!=null){
-            DatabaseReference df1=FirebaseDatabase.getInstance().getReference().child("users");
-           // DatabaseReference df=FirebaseDatabase.getInstance().getReference().child("users");
+            DatabaseReference df1=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
             df1.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.hasChild(user.getUid())){
-                        DatabaseReference df=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
+                    if(dataSnapshot.exists()){
+                        DatabaseReference df=FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile");
                         df.child("MobileNumber").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -228,7 +242,7 @@ public class ProfileActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 String RollNumber=dataSnapshot.getValue().toString();
-                                if(RollNumber!=null) {
+                                if(!RollNumber.isEmpty()) {
                                     txtRollNumber.setText(RollNumber);
                                 }
                             }
@@ -243,7 +257,7 @@ public class ProfileActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 String Address=dataSnapshot.getValue().toString();
-                                if(Address!=null){
+                                if(!Address.isEmpty()){
                                     txtAddress.setText(Address);
                                 }
                             }
@@ -305,8 +319,8 @@ public class ProfileActivity extends AppCompatActivity {
         String RollNumber=txtRollNumber.getText().toString();
         String Address=txtAddress.getText().toString();
 
-        Profile userProfile=new Profile(Name,RollNumber,PhoneNumber,Address,"no","no");
-        databaseReference.child("users").child(user.getUid()).setValue(userProfile);
+        Profile userProfile=new Profile(Name,RollNumber,PhoneNumber,Address,"no","no","no","no","no","no");
+        databaseReference.child("users").child(user.getUid()).child("Profile").setValue(userProfile);
 
         if(DisplayName.isEmpty()){
             txtProName.setError("Name required");

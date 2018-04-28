@@ -26,7 +26,7 @@
         android:background="@color/common_google_signin_btn_text_dark_default"
         app:headerLayout="@layout/header"
         app:itemTextColor="@color/common_google_signin_btn_text_dark_focused"
-        app:menu="@menu/menu_pharmacist">
+        app:menu="@menu/menu_diagnostician">
 
     </android.support.design.widget.NavigationView>
 

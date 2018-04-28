@@ -13,12 +13,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.androidquery.AQuery;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,12 +46,19 @@ public class DoctorHome extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference databaseReference;
 
+    ViewFlipper v_flipper;
+    LinearLayout TreatPatient,Inbox,SentBox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_home);
 
         databaseReference= FirebaseDatabase.getInstance().getReference();
+        mAuth=FirebaseAuth.getInstance();
+
+        int images[]={R.drawable.image1,R.drawable.image2,R.drawable.image3,R.drawable.image4,R.drawable.image5};
+        v_flipper=findViewById(R.id.v_flipper);
 
         drawerLayout=(DrawerLayout)findViewById(R.id.DrawerLayoutDoctorHome);
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
@@ -63,6 +73,32 @@ public class DoctorHome extends AppCompatActivity {
         mPic= (ImageView)navigationView.getHeaderView(0).findViewById(R.id.proImgHeader);
         getCurrentinfo();
 
+        TreatPatient=findViewById(R.id.TreatPatient);
+        Inbox=findViewById(R.id.Inbox);
+        SentBox=findViewById(R.id.SentBox);
+
+        TreatPatient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               PatientTreat();
+            }
+        });
+        Inbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DoctorInboxOpen();
+            }
+        });
+        SentBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DoctorSentBoxOpen();
+            }
+        });
+        for(int image:images){
+            flipperImages(image);
+        }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -71,16 +107,22 @@ public class DoctorHome extends AppCompatActivity {
                         Home();
                         break;
 
-                    case R.id.edtProfile:
-                        EditProfile();
-                        break;
-
-                    case R.id.AdminOptions:
-                        AdminOption();
-                        break;
-
                     case R.id.Logout:
                         Logout();
+                        break;
+
+                    case R.id.LogoutAsDoctor:
+                        LogOutAsDoctor();
+                        break;
+
+                    case R.id.edtInbox:
+                        DoctorInboxOpen();
+                        break;
+                    case R.id.edtSentbox:
+                        DoctorSentBoxOpen();
+                        break;
+                    case R.id.edtTreatPatient:
+                        PatientTreat();
                         break;
                 }
                 return false;
@@ -88,54 +130,43 @@ public class DoctorHome extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        txtDocmsg=(TextView)findViewById(R.id.txtDocmsg);
-        //DatabaseReference df1= FirebaseDatabase.getInstance().getReference().child("Doctors").child("110114071");
-        databaseReference.child("Doctors").child("110114071").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String,String>map=(Map<String,String>)dataSnapshot.getValue();
-                String msg=map.get("msg");
-                txtDocmsg.setText(msg);
-                txtDocmsg.setVisibility(View.VISIBLE);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+    }
+    public void flipperImages(int Image){
+        ImageView imageView=new ImageView(this);
+        imageView.setBackgroundResource(Image);
+        v_flipper.addView(imageView);
+        v_flipper.setFlipInterval(5000);
+        v_flipper.setAutoStart(true);
+        v_flipper.setInAnimation(this,R.anim.slide_in_bottom);
+        v_flipper.setOutAnimation(this,R.anim.slide_out_top);
 
-            }
-        });
-       /*DatabaseReference df1= FirebaseDatabase.getInstance().getReference().child("Doctors").child("110114071");
-       ValueEventListener postListener=new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
-               DatabaseReference df= FirebaseDatabase.getInstance().getReference().child("Doctors").child("110114071");
-               Message msg =dataSnapshot.getValue(Message.class);
-               txtDocmsg.setVisibility(View.VISIBLE);
-               //txtDocmsg.setText(msg.msg);
-           }
-
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
-
-           }
-       };
-       df1.addValueEventListener(postListener);*/
-
-
+    }
+    private void DoctorSentBoxOpen(){
+        startActivity(new Intent(this,DoctorSentboxTabbed.class));
+    }
+    private void  PatientTreat(){
+        startActivity(new Intent(this,TreatPatient.class));
+    }
+    private void DoctorInboxOpen(){
+        startActivity(new Intent(this,doctorInboxTabbed.class));
     }
     private void Home(){
         startActivity(new Intent(this,Home.class));
-    }
-    private void EditProfile(){
-        startActivity(new Intent(this,ProfileActivity.class));
-    }
-    private void AdminOption(){
-        startActivity(new Intent(this,LoginAdmin.class));
     }
     private void Logout(){
         FirebaseAuth.getInstance().signOut();
         finish();
         startActivity(new Intent(this,StartingPage.class));
+    }
+    private void LogOutAsDoctor() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Profile").child("flagDoctor");
+        databaseReference.setValue("no");
+        finish();
+        Intent intent= new Intent(DoctorHome.this, Home.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
 
@@ -157,7 +188,7 @@ public class DoctorHome extends AppCompatActivity {
                 startActivity(new Intent(this,StartingPage.class));
                 break;
             case R.id.Home:
-                startActivity(new Intent(this,Home.class));
+                startActivity(new Intent(this,DoctorHome.class));
                 break;
             case R.id.AdminOptions:
                 startActivity(new Intent(this,LoginAdmin.class));
@@ -165,7 +196,6 @@ public class DoctorHome extends AppCompatActivity {
         }
         return true;
     }
-
     private void getCurrentinfo(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -194,6 +224,9 @@ public class DoctorHome extends AppCompatActivity {
                 }
             };
         }
+    }
+    private void StartingPage(){
+        startActivity(new Intent(this,StartingPage.class));
     }
 
 
