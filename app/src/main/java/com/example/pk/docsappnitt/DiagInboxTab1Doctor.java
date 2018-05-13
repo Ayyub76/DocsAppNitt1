@@ -72,6 +72,7 @@ public class DiagInboxTab1Doctor extends Fragment{
                         intent.putExtra("ProblemKey",model.getPtProblem());
                         intent.putExtra("RemarksKey",model.getRemarks());
                         intent.putExtra("DiagTestsKey",model.getDiagTests());
+                        intent.putExtra("DoctorId",model.getDocId());
                         startActivity(intent);
                     }
                 });

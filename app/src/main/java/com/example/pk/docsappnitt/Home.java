@@ -51,7 +51,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
     TextView txtSample;
     Button btnSample;
 
-    LinearLayout ConsultDoctor,Inbox,SentBox,EditProfile;
+    LinearLayout ConsultDoctor,Inbox,SentBox,EditProfile,HealthTips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +85,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
         Inbox=findViewById(R.id.Inbox);
         SentBox=findViewById(R.id.SentBox);
         EditProfile=findViewById(R.id.EditProfile);
+        HealthTips=findViewById(R.id.HealthTips);
 
         ConsultDoctor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +110,12 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             @Override
             public void onClick(View v) {
                 EditProfile();
+            }
+        });
+        HealthTips.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HealthTipsOpen();
             }
         });
 
@@ -240,6 +247,9 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
                 Sentbox();
         }
         return false;
+    }
+    private void HealthTipsOpen(){
+        startActivity(new Intent(this,HealthTips.class));
     }
     private void Sentbox(){startActivity(new Intent(this,SentBoxTabbed.class));}
     private void Inbox(){

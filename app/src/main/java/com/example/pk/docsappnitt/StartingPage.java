@@ -56,17 +56,6 @@ public class StartingPage extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    /*@Override
-    public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.txtLogin1:
-                startActivity(new Intent(this,MainActivity.class));
-                break;
-            case R.id.txtInfo:
-                startActivity(new Intent(this,AboutUs.class));
-                break;
-        }
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

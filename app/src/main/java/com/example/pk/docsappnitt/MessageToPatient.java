@@ -3,13 +3,14 @@ package com.example.pk.docsappnitt;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MessageToPharmacist {
-    private String doctorName,docId,ptName,ptId,ptGender,ptAge,ptAddress,ptMobile,ptBloodGroup,ptProblem,PharmaName,PharmId,remarks;
+public class MessageToPatient {
+    private String doctorName,docId,ptName,ptId,ptGender,ptAge,ptAddress,ptMobile,ptBloodGroup,ptProblem,PharmaName,PharmId;
+    private String DiagName,DiagId,Remarks;
+    private ArrayList<String> DiagTests;
     private HashMap<String,MedicineClass>MedicineHashMap;
-    private HashMap<String,ArrayList<String>>MedicineArrayHashMap;
     private String subject,date,time;
 
-    public MessageToPharmacist() {
+    public MessageToPatient() {
     }
 
     public String getDoctorName() {
@@ -140,19 +141,35 @@ public class MessageToPharmacist {
         this.time = time;
     }
 
-    public HashMap<String, ArrayList<String>> getMedicineArrayHashMap() {
-        return MedicineArrayHashMap;
+    public String getDiagName() {
+        return DiagName;
     }
 
-    public void setMedicineArrayHashMap(HashMap<String, ArrayList<String>> medicineArrayHashMap) {
-        MedicineArrayHashMap = medicineArrayHashMap;
+    public void setDiagName(String diagName) {
+        DiagName = diagName;
+    }
+
+    public String getDiagId() {
+        return DiagId;
+    }
+
+    public void setDiagId(String diagId) {
+        DiagId = diagId;
     }
 
     public String getRemarks() {
-        return remarks;
+        return Remarks;
     }
 
     public void setRemarks(String remarks) {
-        this.remarks = remarks;
+        Remarks = remarks;
+    }
+
+    public ArrayList<String> getDiagTests() {
+        return DiagTests;
+    }
+
+    public void setDiagTests(ArrayList<String> diagTests) {
+        DiagTests = diagTests;
     }
 }

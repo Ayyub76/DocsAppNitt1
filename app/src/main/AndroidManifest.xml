@@ -66,7 +66,15 @@
         <activity android:name=".DoctorSentboxTabbed" />
         <activity android:name=".MessageViewForDiagnostician" />
         <activity android:name=".MessageViewForPatientFromDoctor" />
-        <activity android:name=".PharmacistReport"></activity>
+        <activity android:name=".PharmacistReport" />
+        <activity android:name=".MessageViewForDiagnosticianFromDoctor" />
+        <activity android:name=".MessageViewForPharmacistFromDoctor" />
+        <activity android:name=".PharmacistInboxTabbed" />
+        <activity android:name=".MessagViewForPharmacistFromDoctorWithReport" />
+        <activity android:name=".diagSentBoxTabbed" />
+        <activity android:name=".DiagReport" />
+        <activity android:name=".PharmacistSentBoxTabbed" />
+        <activity android:name=".HealthTips"></activity>
     </application>
 
 </manifest>

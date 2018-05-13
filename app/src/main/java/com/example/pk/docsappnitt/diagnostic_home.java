@@ -65,11 +65,13 @@ public class diagnostic_home extends AppCompatActivity {
                         Home();
                         break;
                     case R.id.edtReport:
+                        DiagReport();
                         break;
                     case R.id.edtInbox:
                         DiagInbox();
                         break;
                     case R.id.edtSentbox:
+                        DiagSentBox();
                         break;
                     case R.id.LogoutAsDiag:
                         LogOutAsDiag();
@@ -84,6 +86,12 @@ public class diagnostic_home extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
+    private void DiagReport(){
+        startActivity(new Intent(this,DiagReport.class));
+    }
+    private void DiagSentBox(){
+        startActivity(new Intent(this,diagSentBoxTabbed.class));
     }
     private void DiagInbox(){
         startActivity(new Intent(this,diagInboxTabbed.class));

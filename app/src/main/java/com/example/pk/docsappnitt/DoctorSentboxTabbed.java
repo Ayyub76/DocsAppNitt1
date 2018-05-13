@@ -108,7 +108,7 @@ public class DoctorSentboxTabbed extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         SectionPageAdapter adapter=new SectionPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new DoctorSentBoxTab1Patient(),"Patient");
-        adapter.addFragment(new DoctorInboxTab2Pharma(),"Pharmacist");
+        adapter.addFragment(new DoctorSentBoxTab2Pharma(),"Pharmacist");
         adapter.addFragment(new DoctorSentBoxTab3Diagnostic(),"Diagnostician");
         viewPager.setAdapter(adapter);
     }

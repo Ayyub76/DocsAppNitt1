@@ -2,9 +2,9 @@ package com.example.pk.docsappnitt;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,17 +19,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-
-public class InboxTab1Doctor extends Fragment{
+public class diagSentBoxTab1Doctor extends Fragment{
     private static final String TAB="Tab1Fragment";
     FirebaseAuth mAuth;
     DatabaseReference databaseReference;
     private MessageToDoctor msgToDoctor;
-    FirebaseRecyclerAdapter<MessageToPatient, ViewHolder> firebaseRecyclerAdapter;
+    FirebaseRecyclerAdapter<MessageToDiagnostician, ViewHolder> firebaseRecyclerAdapter;
     private RecyclerView recyclerView;
     SwipeRefreshLayout swipe;
     private Context context;
@@ -37,7 +33,7 @@ public class InboxTab1Doctor extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.inboxtab1doctor,container,false);
+        View view=inflater.inflate(R.layout.doctorinboxtab1patient,container,false);
         swipe=view.findViewById(R.id.swipe);
         recyclerView=(RecyclerView)view.findViewById(R.id.recyclerView);
         //recyclerView.setLayoutManager(new LinearLayoutManager();
@@ -47,13 +43,13 @@ public class InboxTab1Doctor extends Fragment{
 
         mAuth=FirebaseAuth.getInstance();
         FirebaseUser user=mAuth.getCurrentUser();
-        databaseReference= FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("Inbox").child("Doctor");
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("DiagnosticSentBox").child("Doctor");
         databaseReference.keepSynced(true);
 
-        firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<MessageToPatient, ViewHolder>(MessageToPatient.class
-                ,R.layout.messagetodiagnostician,ViewHolder.class,databaseReference) {
+        firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<MessageToDiagnostician, ViewHolder>(MessageToDiagnostician.class
+                ,R.layout.messagetodoctor,ViewHolder.class,databaseReference) {
             @Override
-            protected void populateViewHolder(ViewHolder viewHolder, final MessageToPatient model, int position) {
+            protected void populateViewHolder(ViewHolder viewHolder, final MessageToDiagnostician model, int position) {
                 viewHolder.txtView.setText(model.getDoctorName());
                 viewHolder.txtTime.setText(model.getTime());
                 viewHolder.txtSubject.setText(model.getSubject());
@@ -62,53 +58,27 @@ public class InboxTab1Doctor extends Fragment{
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(getActivity(),MessageViewForPatientFromDoctor.class);
+                        Intent intent=new Intent(getActivity(),MessageViewForDiagnosticianFromDoctor.class);
+                        intent.putExtra("AgeKey",model.getPtAge());
                         intent.putExtra("SubjectKey",model.getSubject());
-                        intent.putExtra("DoctorNameKey",model.getDoctorName());
+                        intent.putExtra("PtNameKey",model.getPtName());
                         intent.putExtra("DateKey",model.getDate());
                         intent.putExtra("TimeKey",model.getTime());
-                        intent.putExtra("PtNameKey",model.getPtName());
-                        intent.putExtra("AddressKey",model.getPtAddress());
-                        intent.putExtra("AgeKey",model.getPtAge());
                         intent.putExtra("MobileKey",model.getPtMobile());
                         intent.putExtra("GenderKey",model.getPtGender());
                         intent.putExtra("BloodGroupKey",model.getPtBloodGroup());
                         intent.putExtra("ProblemKey",model.getPtProblem());
+                        intent.putExtra("AddressKey",model.getPtAddress());
+                        intent.putExtra("DiagTestsKey",model.getDiagTests());
+                        intent.putExtra("DoctorNameKey",model.getDoctorName());
                         intent.putExtra("RemarksKey",model.getRemarks());
-                        if(model.getDiagTests()==null){
-                            ArrayList<String> TestEmpty=new ArrayList<>();
-                            TestEmpty.add("No Diagnostic Tests were prescribed");
-                            intent.putExtra("DiagTestsKey",TestEmpty);
-                        }
-                        else{
-                            intent.putExtra("DiagTestsKey",model.getDiagTests());
-                        }
-                        intent.putExtra("PharmaNameKey",model.getPharmaName());
-                        HashMap<String,ArrayList<String>> MD=new HashMap<>();
-                        if(model.getMedicineHashMap()!=null){
-                            HashMap<String,MedicineClass>medicineHashMap=model.getMedicineHashMap();
-                            for (Map.Entry<String,MedicineClass>entry:medicineHashMap.entrySet()) {
-                                String key = entry.getKey();
-                                MedicineClass value = entry.getValue();
-                                ArrayList<String>Comp=new ArrayList<>();
-                                Comp.add(value.getComposition());
-                                Comp.add(value.getDosage());
-                                Comp.add(value.getUsage());
-                                MD.put(key,Comp);
-                            }
-                            intent.putExtra("Medicines",MD);
-                        }
-                        else{
-                            MD.put("No Medicines were prescribed",null);
-                            intent.putExtra("Medicines",MD);
-                        }
                         startActivity(intent);
                     }
                 });
             }
 
             @Override
-            public MessageToPatient getItem(int position) {
+            public MessageToDiagnostician getItem(int position) {
                 return super.getItem(getItemCount()-1-position);
             }
 
@@ -138,7 +108,7 @@ public class InboxTab1Doctor extends Fragment{
         View view;
         public ViewHolder(View itemView){
             super(itemView);
-            txtView=(TextView)itemView.findViewById(R.id.DocName);
+            txtView=(TextView)itemView.findViewById(R.id.From);
             txtTime=(TextView)itemView.findViewById(R.id.Time);
             txtDate=(TextView)itemView.findViewById(R.id.Date);
             txtSubject=(TextView)itemView.findViewById(R.id.Subject);

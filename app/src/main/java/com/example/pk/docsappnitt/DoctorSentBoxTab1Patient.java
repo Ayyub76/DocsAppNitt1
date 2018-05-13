@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,13 +21,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class DoctorSentBoxTab1Patient extends Fragment{
     private static final String TAB="Tab1Fragment";
     FirebaseAuth mAuth;
     DatabaseReference databaseReference;
     private MessageToDoctor msgToDoctor;
-    FirebaseRecyclerAdapter<MessageToDiagnostician, ViewHolder> firebaseRecyclerAdapter;
+    FirebaseRecyclerAdapter<MessageToPatient, ViewHolder> firebaseRecyclerAdapter;
     private RecyclerView recyclerView;
     SwipeRefreshLayout swipe;
     private Context context;
@@ -46,10 +53,10 @@ public class DoctorSentBoxTab1Patient extends Fragment{
         databaseReference= FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("DoctorSentBox").child("Patient");
         databaseReference.keepSynced(true);
 
-        firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<MessageToDiagnostician, ViewHolder>(MessageToDiagnostician.class
+        firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<MessageToPatient, ViewHolder>(MessageToPatient.class
                 ,R.layout.messagetodiagnostician,ViewHolder.class,databaseReference) {
             @Override
-            protected void populateViewHolder(ViewHolder viewHolder, final MessageToDiagnostician model, int position) {
+            protected void populateViewHolder(ViewHolder viewHolder, final MessageToPatient model, int position) {
                 viewHolder.txtView.setText(model.getDoctorName());
                 viewHolder.txtTime.setText(model.getTime());
                 viewHolder.txtSubject.setText(model.getSubject());
@@ -71,14 +78,40 @@ public class DoctorSentBoxTab1Patient extends Fragment{
                         intent.putExtra("BloodGroupKey",model.getPtBloodGroup());
                         intent.putExtra("ProblemKey",model.getPtProblem());
                         intent.putExtra("RemarksKey",model.getRemarks());
-                        intent.putExtra("DiagTestsKey",model.getDiagTests());
+                        if(model.getDiagTests()==null){
+                            ArrayList<String>TestEmpty=new ArrayList<>();
+                            TestEmpty.add("No Diagnostic Tests were prescribed");
+                            intent.putExtra("DiagTestsKey",TestEmpty);
+                        }
+                        else{
+                            intent.putExtra("DiagTestsKey",model.getDiagTests());
+                        }
+                        intent.putExtra("PharmaNameKey",model.getPharmaName());
+                        HashMap<String,ArrayList<String>>MD=new HashMap<>();
+                        if(model.getMedicineHashMap()!=null){
+                            HashMap<String,MedicineClass>medicineHashMap=model.getMedicineHashMap();
+                            for (Map.Entry<String,MedicineClass>entry:medicineHashMap.entrySet()) {
+                                String key = entry.getKey();
+                                MedicineClass value = entry.getValue();
+                                ArrayList<String>Comp=new ArrayList<>();
+                                Comp.add(value.getComposition());
+                                Comp.add(value.getDosage());
+                                Comp.add(value.getUsage());
+                                MD.put(key,Comp);
+                            }
+                            intent.putExtra("Medicines",MD);
+                        }
+                        else{
+                            MD.put("No Medicines were prescribed",null);
+                            intent.putExtra("Medicines",MD);
+                        }
                         startActivity(intent);
                     }
                 });
             }
 
             @Override
-            public MessageToDiagnostician getItem(int position) {
+            public MessageToPatient getItem(int position) {
                 return super.getItem(getItemCount()-1-position);
             }
 

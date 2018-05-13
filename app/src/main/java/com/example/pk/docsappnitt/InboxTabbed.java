@@ -119,7 +119,6 @@ public class InboxTabbed extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         SectionPageAdapter adapter=new SectionPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new InboxTab1Doctor(),"Doctor");
-        adapter.addFragment(new InboxTab2Pharma(),"Pharmacist");
         viewPager.setAdapter(adapter);
     }
 

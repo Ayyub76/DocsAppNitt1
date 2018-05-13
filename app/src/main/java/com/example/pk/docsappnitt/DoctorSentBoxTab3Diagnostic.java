@@ -43,7 +43,7 @@ public class DoctorSentBoxTab3Diagnostic extends Fragment{
 
         mAuth=FirebaseAuth.getInstance();
         FirebaseUser user=mAuth.getCurrentUser();
-        databaseReference= FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("DoctorSentBox").child("Patient");
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid()).child("DoctorSentBox").child("Diagnostician");
         databaseReference.keepSynced(true);
 
         firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<MessageToDiagnostician, ViewHolder>(MessageToDiagnostician.class
@@ -58,7 +58,7 @@ public class DoctorSentBoxTab3Diagnostic extends Fragment{
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent=new Intent(getActivity(),MessageViewForPatientFromDoctor.class);
+                        Intent intent=new Intent(getActivity(),MessageViewForDiagnosticianFromDoctor.class);
                         intent.putExtra("SubjectKey",model.getSubject());
                         intent.putExtra("DoctorNameKey",model.getDoctorName());
                         intent.putExtra("DateKey",model.getDate());

@@ -327,8 +327,8 @@ public class TreatPatient extends AppCompatActivity {
                                            msg.setPharmId(PharmId);
                                            databaseReference.child("users").child(msg.getPharmId()).child("PharmacistInBox").child("Doctor").push().setValue(msg);
                                            databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Pharmacist").push().setValue(msg);
-                                           databaseReference.child("users").child(PtId).child("Inbox").child("Doctor(Pharmacist)").push().setValue(msg);
-                                           databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msg);
+                                           //databaseReference.child("users").child(PtId).child("Inbox").child("Doctor(Pharmacist)").push().setValue(msg);
+                                           //databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msg);
                                        }
 
                                        @Override
@@ -336,6 +336,30 @@ public class TreatPatient extends AppCompatActivity {
 
                                        }
                                    });
+
+                                   final MessageToPatient msgP=new MessageToPatient();
+                                   msgP.setPtName(patientName.getText().toString());
+                                   msgP.setPtId(PtId);
+                                   msgP.setPtGender(patientGender.getText().toString());
+                                   msgP.setPtAge(patientAge.getText().toString());
+                                   msgP.setPtAddress(patientAddress.getText().toString());
+                                   msgP.setPtMobile(patientMobileNumber.getText().toString());
+                                   msgP.setPtBloodGroup(patientBloodGroup.getText().toString());
+                                   msgP.setPtProblem(patientProblem.getText().toString());
+                                   msgP.setPharmaName(PharmacistName.getText().toString());
+                                   msgP.setMedicineHashMap(MedicineHashMap);
+                                   msgP.setDoctorName(user.getDisplayName());
+                                   msgP.setDocId(user.getUid());
+                                   msgP.setSubject("Regarding Pharmacy Medicines");
+                                   str = df.format(todaysDate);
+                                   msgP.setDate(str);
+                                   str=time.format(todaysDate);
+                                   msgP.setTime(str);
+                                   msgP.setDiagName(diagnosticianName.getText().toString());
+                                   msgP.setDiagTests(SelectedTest);
+                                   databaseReference.child("users").child(PtId).child("Inbox").child("Doctor").push().setValue(msgP);
+                                   databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msgP);
+
 
 
                                    Toast.makeText(TreatPatient.this,"Message sent to Patient and Pharmacist",Toast.LENGTH_SHORT).show();
@@ -351,7 +375,7 @@ public class TreatPatient extends AppCompatActivity {
                                @Override
                                public void onClick(DialogInterface dialog, int which) {
                                    final FirebaseUser user=mAuth.getCurrentUser();
-                                    final MessageToDiagnostician msg=new MessageToDiagnostician();
+                                   final MessageToDiagnostician msg=new MessageToDiagnostician();
                                    msg.setPtName(patientName.getText().toString());
                                    msg.setPtId(PtId);
                                    msg.setPtGender(patientGender.getText().toString());
@@ -382,8 +406,8 @@ public class TreatPatient extends AppCompatActivity {
                                            msg.setDiagId(DiagId);
                                            databaseReference.child("users").child(msg.getDiagId()).child("DiagnosticInBox").child("Doctor").push().setValue(msg);
                                            databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Diagnostician").push().setValue(msg);
-                                           databaseReference.child("users").child(PtId).child("Inbox").child("Doctor").push().setValue(msg);
-                                           databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msg);
+                                           //databaseReference.child("users").child(PtId).child("Inbox").child("Doctor").push().setValue(msg);
+                                           //databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msg);
                                        }
 
                                        @Override
@@ -391,6 +415,28 @@ public class TreatPatient extends AppCompatActivity {
 
                                        }
                                    });
+                                   final MessageToPatient msgP=new MessageToPatient();
+                                   msgP.setPtName(patientName.getText().toString());
+                                   msgP.setPtId(PtId);
+                                   msgP.setPtGender(patientGender.getText().toString());
+                                   msgP.setPtAge(patientAge.getText().toString());
+                                   msgP.setPtAddress(patientAddress.getText().toString());
+                                   msgP.setPtMobile(patientMobileNumber.getText().toString());
+                                   msgP.setPtBloodGroup(patientBloodGroup.getText().toString());
+                                   msgP.setPtProblem(patientProblem.getText().toString());
+                                   msgP.setPharmaName(PharmacistName.getText().toString());
+                                   msgP.setMedicineHashMap(MedicineHashMap);
+                                   msgP.setDoctorName(user.getDisplayName());
+                                   msgP.setDocId(user.getUid());
+                                   msgP.setSubject("Regarding Pharmacy Medicines");
+                                   str = df.format(todaysDate);
+                                   msgP.setDate(str);
+                                   str=time.format(todaysDate);
+                                   msgP.setTime(str);
+                                   msgP.setDiagName(diagnosticianName.getText().toString());
+                                   msgP.setDiagTests(SelectedTest);
+                                   databaseReference.child("users").child(PtId).child("Inbox").child("Doctor").push().setValue(msgP);
+                                   databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msgP);
                                    Toast.makeText(TreatPatient.this,"Message sent to Patient and Diagnostician",Toast.LENGTH_SHORT).show();
                                }
                            });
@@ -405,6 +451,104 @@ public class TreatPatient extends AppCompatActivity {
                            sub_builder.setPositiveButton("send", new DialogInterface.OnClickListener() {
                                @Override
                                public void onClick(DialogInterface dialog, int which) {
+                                   final FirebaseUser user=mAuth.getCurrentUser();
+                                   final MessageToPharmacist msg=new MessageToPharmacist();
+                                   msg.setPtName(patientName.getText().toString());
+                                   msg.setPtId(PtId);
+                                   msg.setPtGender(patientGender.getText().toString());
+                                   msg.setPtAge(patientAge.getText().toString());
+                                   msg.setPtAddress(patientAddress.getText().toString());
+                                   msg.setPtMobile(patientMobileNumber.getText().toString());
+                                   msg.setPtBloodGroup(patientBloodGroup.getText().toString());
+                                   msg.setPtProblem(patientProblem.getText().toString());
+                                   msg.setPharmaName(PharmacistName.getText().toString());
+                                   msg.setMedicineHashMap(MedicineHashMap);
+                                   msg.setDoctorName(user.getDisplayName());
+                                   msg.setDocId(user.getUid());
+                                   msg.setSubject("Regarding Pharmacy Medicines");
+                                   Date todaysDate = new Date();
+                                   DateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                                   String str = df.format(todaysDate);
+                                   msg.setDate(str);
+                                   DateFormat time=new SimpleDateFormat("HH:mm:ss");
+                                   str=time.format(todaysDate);
+                                   msg.setTime(str);
+                                   DatabaseReference db=FirebaseDatabase.getInstance().getReference().child("Pharmacists").child(msg.getPharmaName());
+                                   db.addListenerForSingleValueEvent(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                           String PharmId=dataSnapshot.child("Uid").getValue(String.class);
+                                           msg.setPharmId(PharmId);
+                                           databaseReference.child("users").child(msg.getPharmId()).child("PharmacistInBox").child("Doctor").push().setValue(msg);
+                                           databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Pharmacist").push().setValue(msg);
+                                           //databaseReference.child("users").child(PtId).child("Inbox").child("Doctor(Pharmacist)").push().setValue(msg);
+                                           //databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msg);
+                                       }
+
+                                       @Override
+                                       public void onCancelled(DatabaseError databaseError) {
+
+                                       }
+                                   });
+
+                                   final MessageToDiagnostician msgD=new MessageToDiagnostician();
+                                   msgD.setPtName(patientName.getText().toString());
+                                   msgD.setPtId(PtId);
+                                   msgD.setPtGender(patientGender.getText().toString());
+                                   msgD.setPtAge(patientAge.getText().toString());
+                                   msgD.setPtAddress(patientAddress.getText().toString());
+                                   msgD.setPtMobile(patientMobileNumber.getText().toString());
+                                   msgD.setPtBloodGroup(patientBloodGroup.getText().toString());
+                                   msgD.setPtProblem(patientProblem.getText().toString());
+                                   msgD.setDiagName(diagnosticianName.getText().toString());
+                                   msgD.setDiagTests(SelectedTest);
+                                   msgD.setDoctorName(user.getDisplayName());
+                                   msgD.setDocId(user.getUid());
+                                   msgD.setSubject("Regarding Diagnostic Tests");
+                                   msgD.setRemarks(Remarks.getText().toString());
+                                   String strD = df.format(todaysDate);
+                                   msgD.setDate(strD);
+                                   strD=time.format(todaysDate);
+                                   msgD.setTime(strD);
+                                   DatabaseReference dbD=FirebaseDatabase.getInstance().getReference().child("Diagnosticians").child(msgD.getDiagName());
+                                   dbD.addValueEventListener(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(DataSnapshot dataSnapshot) {
+                                           String DiagId=dataSnapshot.child("Uid").getValue(String.class);
+                                           msgD.setDiagId(DiagId);
+                                           databaseReference.child("users").child(msgD.getDiagId()).child("DiagnosticInBox").child("Doctor").push().setValue(msgD);
+                                           databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Diagnostician").push().setValue(msgD);
+                                       }
+
+                                       @Override
+                                       public void onCancelled(DatabaseError databaseError) {
+
+                                       }
+                                   });
+
+                                   final MessageToPatient msgP=new MessageToPatient();
+                                   msgP.setPtName(patientName.getText().toString());
+                                   msgP.setPtId(PtId);
+                                   msgP.setPtGender(patientGender.getText().toString());
+                                   msgP.setPtAge(patientAge.getText().toString());
+                                   msgP.setPtAddress(patientAddress.getText().toString());
+                                   msgP.setPtMobile(patientMobileNumber.getText().toString());
+                                   msgP.setPtBloodGroup(patientBloodGroup.getText().toString());
+                                   msgP.setPtProblem(patientProblem.getText().toString());
+                                   msgP.setPharmaName(PharmacistName.getText().toString());
+                                   msgP.setMedicineHashMap(MedicineHashMap);
+                                   msgP.setDoctorName(user.getDisplayName());
+                                   msgP.setDocId(user.getUid());
+                                   msgP.setSubject("Regarding Pharmacy Medicines");
+                                   str = df.format(todaysDate);
+                                   msgP.setDate(str);
+                                   str=time.format(todaysDate);
+                                   msgP.setTime(str);
+                                   msgP.setDiagName(diagnosticianName.getText().toString());
+                                   msgP.setDiagTests(SelectedTest);
+                                   databaseReference.child("users").child(PtId).child("Inbox").child("Doctor").push().setValue(msgP);
+                                   databaseReference.child("users").child(user.getUid()).child("DoctorSentBox").child("Patient").push().setValue(msgP);
+
                                    Toast.makeText(TreatPatient.this,"Message sent to Patient,Pharmacist and Diagnostician",Toast.LENGTH_SHORT).show();
                                }
                            });

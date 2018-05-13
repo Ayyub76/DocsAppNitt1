@@ -120,7 +120,6 @@ public class SentBoxTabbed extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager){
         SectionPageAdapter adapter=new SectionPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new SentBoxTab1Doctor(),"Doctor");
-        adapter.addFragment(new SentBoxTab2Pharma(),"Pharmacist");
         viewPager.setAdapter(adapter);
     }
 

@@ -79,11 +79,13 @@ public class diagInboxTabbed extends AppCompatActivity {
                         Home();
                         break;
                     case R.id.edtReport:
+                        DiagReport();
                         break;
                     case R.id.edtInbox:
                         DiagInbox();
                         break;
                     case R.id.edtSentbox:
+                        DiagSentBox();
                         break;
                     case R.id.LogoutAsDiag:
                         LogOutAsDiag();
@@ -125,7 +127,13 @@ public class diagInboxTabbed extends AppCompatActivity {
         }
         return true;
     }
+    private void DiagSentBox(){
+        startActivity(new Intent(this,diagSentBoxTabbed.class));
+    }
 
+    private void DiagReport(){
+        startActivity(new Intent(this,DiagReport.class));
+    }
     private void DiagInbox(){
         startActivity(new Intent(this,diagInboxTabbed.class));
     }
